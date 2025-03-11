@@ -1,10 +1,10 @@
 ---
 title: DirectResponse
-weight: 40
+weight: 20
 description: API reference for DirectResponse
 ---
 
-# DirectResponse API Reference
+# DirectResponse
 
 #### DirectResponse
 
@@ -30,6 +30,8 @@ _Appears in:_
 
 
 
+# DirectResponseList
+
 #### DirectResponseList
 
 
@@ -52,6 +54,8 @@ _Appears in:_
 
 
 
+# DirectResponseSpec
+
 #### DirectResponseSpec
 
 
@@ -70,6 +74,8 @@ _Appears in:_
 
 
 
+
+# DirectResponseStatus
 
 #### DirectResponseStatus
 

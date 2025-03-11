@@ -1,10 +1,10 @@
 ---
 title: GatewayParameters
-weight: 60
+weight: 30
 description: API reference for GatewayParameters
 ---
 
-# GatewayParameters API Reference
+# GatewayParameters
 
 #### GatewayParameters
 
@@ -32,6 +32,8 @@ _Appears in:_
 
 
 
+# GatewayParametersList
+
 #### GatewayParametersList
 
 
@@ -54,103 +56,7 @@ _Appears in:_
 
 
 
-#### AiExtension
-
-
-
-Configuration for the AI extension.
-
-
-
-_Appears in:_
-- [KubernetesProxyConfig](#kubernetesproxyconfig)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `enabled` _boolean_ | Whether to enable the extension. |  | Optional: \{\} <br /> |
-| `image` _[Image](#image)_ | The extension's container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
-| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
-| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional: \{\} <br /> |
-| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | The extension's container ports. |  | Optional: \{\} <br /> |
-| `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br />```yaml<br />stats:<br />  customLabels:<br />    - name: "subject"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:sub"<br />    - name: "issuer"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:iss"<br />``` |  |  |
-
-
-
-
-#### AiExtensionStats
-
-
-
-
-
-
-
-_Appears in:_
-- [AiExtension](#aiextension)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `customLabels` _[CustomLabel](#customlabel) array_ | Set of custom labels to be added to the request metrics.<br />These will be added on each request which goes through the AI Extension. |  |  |
-
-
-
-
-#### CustomLabel
-
-_Underlying type:_ _[struct{Name string "json:\"name\""; MetadataNamespace *string "json:\"metadataNamespace,omitempty\""; MetdataKey string "json:\"metadataKey\""; KeyDelimiter *string "json:\"keyDelimiter,omitempty\""}](#struct{name-string-"json:\"name\"";-metadatanamespace-*string-"json:\"metadatanamespace,omitempty\"";-metdatakey-string-"json:\"metadatakey\"";-keydelimiter-*string-"json:\"keydelimiter,omitempty\""})_
-
-
-
-
-
-_Appears in:_
-- [AiExtensionStats](#aiextensionstats)
-
-
-
-
-
-#### EnvoyBootstrap
-
-
-
-Configuration for the Envoy proxy instance that is provisioned from a
-Kubernetes Gateway.
-
-
-
-_Appears in:_
-- [EnvoyContainer](#envoycontainer)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",<br />"critical" and "off". Defaults to "info". See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information. |  | Optional: \{\} <br /> |
-| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and<br />the values are one of "trace", "debug", "info", "warn", "error",<br />"critical", or "off", e.g.<br /><br />	```yaml<br />	componentLogLevels:<br />	  upstream: debug<br />	  connection: trace<br />	```<br /><br />These will be converted to the `--component-log-level` Envoy argument<br />value. See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information.<br /><br />Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional: \{\} <br /> |
-
-
-
-
-#### EnvoyContainer
-
-
-
-Configuration for the container running Envoy.
-
-
-
-_Appears in:_
-- [KubernetesProxyConfig](#kubernetesproxyconfig)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `bootstrap` _[EnvoyBootstrap](#envoybootstrap)_ | Initial envoy configuration. |  | Optional: \{\} <br /> |
-| `image` _[Image](#image)_ | The envoy container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details.<br /><br />Default values, which may be overridden individually:<br /><br />	registry: quay.io/solo-io<br />	repository: gloo-envoy-wrapper (OSS) / gloo-ee-envoy-wrapper (EE)<br />	tag: <gloo version> (OSS) / <gloo-ee version> (EE)<br />	pullPolicy: IfNotPresent |  | Optional: \{\} <br /> |
-| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
-
-
-
+# GatewayParametersSpec
 
 #### GatewayParametersSpec
 
@@ -172,108 +78,7 @@ _Appears in:_
 
 
 
-#### GatewayParametersStatus
-
-
-
-The current conditions of the GatewayParameters. This is not currently implemented.
-
-
-
-_Appears in:_
-- [GatewayParameters](#gatewayparameters)
-
-
-
-
-
-#### GracefulShutdownSpec
-
-
-
-
-
-
-
-_Appears in:_
-- [Pod](#pod)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `enabled` _boolean_ | Enable grace period before shutdown to finish current requests while Envoy health checks fail to e.g. notify external load balancers. *NOTE:* This will not have any effect if you have not defined health checks via the health check filter |  | Optional: \{\} <br /> |
-| `sleepTimeSeconds` _integer_ | Time (in seconds) for the preStop hook to wait before allowing Envoy to terminate |  | Optional: \{\} <br /> |
-
-
-
-
-#### Image
-
-
-
-A container image. See https://kubernetes.io/docs/concepts/containers/images
-for details.
-
-
-
-_Appears in:_
-- [AiExtension](#aiextension)
-- [EnvoyContainer](#envoycontainer)
-- [IstioContainer](#istiocontainer)
-- [SdsContainer](#sdscontainer)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `registry` _string_ | The image registry. |  | Optional: \{\} <br /> |
-| `repository` _string_ | The image repository (name). |  | Optional: \{\} <br /> |
-| `tag` _string_ | The image tag. |  | Optional: \{\} <br /> |
-| `digest` _string_ | The hash digest of the image, e.g. `sha256:12345...` |  | Optional: \{\} <br /> |
-| `pullPolicy` _[PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#pullpolicy-v1-core)_ | The image pull policy for the container. See<br />https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy<br />for details. |  | Optional: \{\} <br /> |
-
-
-
-
-#### IstioContainer
-
-
-
-Configuration for the container running the istio-proxy.
-
-
-
-_Appears in:_
-- [IstioIntegration](#istiointegration)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `image` _[Image](#image)_ | The envoy container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
-| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
-| `logLevel` _string_ | Log level for istio-proxy. Options include "info", "debug", "warning", and "error".<br />Default level is info Default is "warning". |  | Optional: \{\} <br /> |
-| `istioDiscoveryAddress` _string_ | The address of the istio discovery service. Defaults to "istiod.istio-system.svc:15012". |  | Optional: \{\} <br /> |
-| `istioMetaMeshId` _string_ | The mesh id of the istio mesh. Defaults to "cluster.local". |  | Optional: \{\} <br /> |
-| `istioMetaClusterId` _string_ | The cluster id of the istio cluster. Defaults to "Kubernetes". |  | Optional: \{\} <br /> |
-
-
-
-
-#### IstioIntegration
-
-
-
-Configuration for the Istio integration settings used by a Gloo Gateway's data plane (Envoy proxy instance)
-
-
-
-_Appears in:_
-- [KubernetesProxyConfig](#kubernetesproxyconfig)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `istioProxyContainer` _[IstioContainer](#istiocontainer)_ | Configuration for the container running istio-proxy.<br />Note that if Istio integration is not enabled, the istio container will not be injected<br />into the gateway proxy deployment. |  | Optional: \{\} <br /> |
-| `customSidecars` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | do not use slice of pointers: https://github.com/kubernetes/code-generator/issues/166<br />Override the default Istio sidecar in gateway-proxy with a custom container. |  | Optional: \{\} <br /> |
-
-
-
+# KubernetesProxyConfig
 
 #### KubernetesProxyConfig
 
@@ -303,6 +108,254 @@ _Appears in:_
 
 
 
+# ProxyDeployment
+
+#### ProxyDeployment
+
+
+
+Configuration for the Proxy deployment in Kubernetes.
+
+
+
+_Appears in:_
+- [KubernetesProxyConfig](#kubernetesproxyconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `replicas` _integer_ | The number of desired pods. Defaults to 1. |  | Optional: \{\} <br /> |
+
+
+
+
+# EnvoyContainer
+
+#### EnvoyContainer
+
+
+
+Configuration for the container running Envoy.
+
+
+
+_Appears in:_
+- [KubernetesProxyConfig](#kubernetesproxyconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `bootstrap` _[EnvoyBootstrap](#envoybootstrap)_ | Initial envoy configuration. |  | Optional: \{\} <br /> |
+| `image` _[Image](#image)_ | The envoy container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details.<br /><br />Default values, which may be overridden individually:<br /><br />	registry: quay.io/solo-io<br />	repository: gloo-envoy-wrapper (OSS) / gloo-ee-envoy-wrapper (EE)<br />	tag: <gloo version> (OSS) / <gloo-ee version> (EE)<br />	pullPolicy: IfNotPresent |  | Optional: \{\} <br /> |
+| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
+
+
+
+
+# EnvoyBootstrap
+
+#### EnvoyBootstrap
+
+
+
+Configuration for the Envoy proxy instance that is provisioned from a
+Kubernetes Gateway.
+
+
+
+_Appears in:_
+- [EnvoyContainer](#envoycontainer)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",<br />"critical" and "off". Defaults to "info". See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information. |  | Optional: \{\} <br /> |
+| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and<br />the values are one of "trace", "debug", "info", "warn", "error",<br />"critical", or "off", e.g.<br /><br />	```yaml<br />	componentLogLevels:<br />	  upstream: debug<br />	  connection: trace<br />	```<br /><br />These will be converted to the `--component-log-level` Envoy argument<br />value. See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information.<br /><br />Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional: \{\} <br /> |
+
+
+
+
+# Image
+
+#### Image
+
+
+
+A container image. See https://kubernetes.io/docs/concepts/containers/images
+for details.
+
+
+
+_Appears in:_
+- [AiExtension](#aiextension)
+- [EnvoyContainer](#envoycontainer)
+- [IstioContainer](#istiocontainer)
+- [SdsContainer](#sdscontainer)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `registry` _string_ | The image registry. |  | Optional: \{\} <br /> |
+| `repository` _string_ | The image repository (name). |  | Optional: \{\} <br /> |
+| `tag` _string_ | The image tag. |  | Optional: \{\} <br /> |
+| `digest` _string_ | The hash digest of the image, e.g. `sha256:12345...` |  | Optional: \{\} <br /> |
+| `pullPolicy` _[PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#pullpolicy-v1-core)_ | The image pull policy for the container. See<br />https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy<br />for details. |  | Optional: \{\} <br /> |
+
+
+
+
+# AiExtension
+
+#### AiExtension
+
+
+
+Configuration for the AI extension.
+
+
+
+_Appears in:_
+- [KubernetesProxyConfig](#kubernetesproxyconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `enabled` _boolean_ | Whether to enable the extension. |  | Optional: \{\} <br /> |
+| `image` _[Image](#image)_ | The extension's container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
+| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
+| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional: \{\} <br /> |
+| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | The extension's container ports. |  | Optional: \{\} <br /> |
+| `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br />```yaml<br />stats:<br />  customLabels:<br />    - name: "subject"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:sub"<br />    - name: "issuer"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:iss"<br />``` |  |  |
+
+
+
+
+# AiExtensionStats
+
+#### AiExtensionStats
+
+
+
+
+
+
+
+_Appears in:_
+- [AiExtension](#aiextension)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `customLabels` _[CustomLabel](#customlabel) array_ | Set of custom labels to be added to the request metrics.<br />These will be added on each request which goes through the AI Extension. |  |  |
+
+
+
+
+# CustomLabel
+
+#### CustomLabel
+
+_Underlying type:_ _[struct{Name string "json:\"name\""; MetadataNamespace *string "json:\"metadataNamespace,omitempty\""; MetdataKey string "json:\"metadataKey\""; KeyDelimiter *string "json:\"keyDelimiter,omitempty\""}](#struct{name-string-"json:\"name\"";-metadatanamespace-*string-"json:\"metadatanamespace,omitempty\"";-metdatakey-string-"json:\"metadatakey\"";-keydelimiter-*string-"json:\"keydelimiter,omitempty\""})_
+
+
+
+
+
+_Appears in:_
+- [AiExtensionStats](#aiextensionstats)
+
+
+
+
+
+# IstioContainer
+
+#### IstioContainer
+
+
+
+Configuration for the container running the istio-proxy.
+
+
+
+_Appears in:_
+- [IstioIntegration](#istiointegration)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `image` _[Image](#image)_ | The envoy container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
+| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
+| `logLevel` _string_ | Log level for istio-proxy. Options include "info", "debug", "warning", and "error".<br />Default level is info Default is "warning". |  | Optional: \{\} <br /> |
+| `istioDiscoveryAddress` _string_ | The address of the istio discovery service. Defaults to "istiod.istio-system.svc:15012". |  | Optional: \{\} <br /> |
+| `istioMetaMeshId` _string_ | The mesh id of the istio mesh. Defaults to "cluster.local". |  | Optional: \{\} <br /> |
+| `istioMetaClusterId` _string_ | The cluster id of the istio cluster. Defaults to "Kubernetes". |  | Optional: \{\} <br /> |
+
+
+
+
+# IstioIntegration
+
+#### IstioIntegration
+
+
+
+Configuration for the Istio integration settings used by a Gloo Gateway's data plane (Envoy proxy instance)
+
+
+
+_Appears in:_
+- [KubernetesProxyConfig](#kubernetesproxyconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `istioProxyContainer` _[IstioContainer](#istiocontainer)_ | Configuration for the container running istio-proxy.<br />Note that if Istio integration is not enabled, the istio container will not be injected<br />into the gateway proxy deployment. |  | Optional: \{\} <br /> |
+| `customSidecars` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | do not use slice of pointers: https://github.com/kubernetes/code-generator/issues/166<br />Override the default Istio sidecar in gateway-proxy with a custom container. |  | Optional: \{\} <br /> |
+
+
+
+
+# SdsContainer
+
+#### SdsContainer
+
+
+
+Configuration for the container running Gloo SDS.
+
+
+
+_Appears in:_
+- [KubernetesProxyConfig](#kubernetesproxyconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `image` _[Image](#image)_ | The SDS container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
+| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
+| `bootstrap` _[SdsBootstrap](#sdsbootstrap)_ | Initial SDS container configuration. |  | Optional: \{\} <br /> |
+
+
+
+
+# SdsBootstrap
+
+#### SdsBootstrap
+
+
+
+Configuration for the SDS instance that is provisioned from a Kubernetes Gateway.
+
+
+
+_Appears in:_
+- [SdsContainer](#sdscontainer)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `logLevel` _string_ | Log level for SDS. Options include "info", "debug", "warn", "error", "panic" and "fatal".<br />Default level is "info". |  | Optional: \{\} <br /> |
+
+
+
+
+# Pod
+
 #### Pod
 
 
@@ -331,77 +384,28 @@ _Appears in:_
 
 
 
-#### ProxyDeployment
+# GracefulShutdownSpec
+
+#### GracefulShutdownSpec
 
 
 
-Configuration for the Proxy deployment in Kubernetes.
+
 
 
 
 _Appears in:_
-- [KubernetesProxyConfig](#kubernetesproxyconfig)
+- [Pod](#pod)
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `replicas` _integer_ | The number of desired pods. Defaults to 1. |  | Optional: \{\} <br /> |
+| `enabled` _boolean_ | Enable grace period before shutdown to finish current requests while Envoy health checks fail to e.g. notify external load balancers. *NOTE:* This will not have any effect if you have not defined health checks via the health check filter |  | Optional: \{\} <br /> |
+| `sleepTimeSeconds` _integer_ | Time (in seconds) for the preStop hook to wait before allowing Envoy to terminate |  | Optional: \{\} <br /> |
 
 
 
 
-#### SdsBootstrap
-
-
-
-Configuration for the SDS instance that is provisioned from a Kubernetes Gateway.
-
-
-
-_Appears in:_
-- [SdsContainer](#sdscontainer)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `logLevel` _string_ | Log level for SDS. Options include "info", "debug", "warn", "error", "panic" and "fatal".<br />Default level is "info". |  | Optional: \{\} <br /> |
-
-
-
-
-#### SdsContainer
-
-
-
-Configuration for the container running Gloo SDS.
-
-
-
-_Appears in:_
-- [KubernetesProxyConfig](#kubernetesproxyconfig)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `image` _[Image](#image)_ | The SDS container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details. |  | Optional: \{\} <br /> |
-| `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
-| `bootstrap` _[SdsBootstrap](#sdsbootstrap)_ | Initial SDS container configuration. |  | Optional: \{\} <br /> |
-
-
-
-
-#### SelfManagedGateway
-
-
-
-
-
-
-
-_Appears in:_
-- [GatewayParametersSpec](#gatewayparametersspec)
-
-
-
-
+# Service
 
 #### Service
 
@@ -424,6 +428,8 @@ _Appears in:_
 
 
 
+# ServiceAccount
+
 #### ServiceAccount
 
 
@@ -443,6 +449,8 @@ _Appears in:_
 
 
 
+# StatsConfig
+
 #### StatsConfig
 
 
@@ -460,6 +468,40 @@ _Appears in:_
 | `routePrefixRewrite` _string_ | The Envoy stats endpoint to which the metrics are written |  | Optional: \{\} <br /> |
 | `enableStatsRoute` _boolean_ | Enables an additional route to the stats cluster defaulting to /stats |  | Optional: \{\} <br /> |
 | `statsRoutePrefixRewrite` _string_ | The Envoy stats endpoint with general metrics for the additional stats route |  | Optional: \{\} <br /> |
+
+
+
+
+# SelfManagedGateway
+
+#### SelfManagedGateway
+
+
+
+
+
+
+
+_Appears in:_
+- [GatewayParametersSpec](#gatewayparametersspec)
+
+
+
+
+
+# GatewayParametersStatus
+
+#### GatewayParametersStatus
+
+
+
+The current conditions of the GatewayParameters. This is not currently implemented.
+
+
+
+_Appears in:_
+- [GatewayParameters](#gatewayparameters)
+
 
 
 
