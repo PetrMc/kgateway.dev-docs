@@ -1,36 +1,10 @@
 ---
-title: GatewayParameters
-weight: 60
-description: API reference for GatewayParameters
+title: GatewayParametersList
+weight: 70
+description: API reference for GatewayParametersList
 ---
 
-# GatewayParameters API Reference
-
-#### GatewayParameters
-
-
-
-A GatewayParameters contains configuration that is used to dynamically
-provision kgateway's data plane (Envoy proxy instance), based on a
-Kubernetes Gateway.
-
-
-
-_Appears in:_
-- [GatewayParametersList](#gatewayparameterslist)
-
-| Field | Description | Default | Validation |
-| --- | --- | --- | --- |
-| `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
-| `kind` _string_ | `GatewayParameters` | | |
-| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
-| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[GatewayParametersSpec](#gatewayparametersspec)_ |  |  |  |
-| `status` _[GatewayParametersStatus](#gatewayparametersstatus)_ |  |  |  |
-
-
-
+# GatewayParametersList API Reference
 
 #### GatewayParametersList
 
@@ -148,6 +122,32 @@ _Appears in:_
 | `image` _[Image](#image)_ | The envoy container image. See<br />https://kubernetes.io/docs/concepts/containers/images<br />for details.<br /><br />Default values, which may be overridden individually:<br /><br />	registry: quay.io/solo-io<br />	repository: gloo-envoy-wrapper (OSS) / gloo-ee-envoy-wrapper (EE)<br />	tag: <gloo version> (OSS) / <gloo-ee version> (EE)<br />	pullPolicy: IfNotPresent |  | Optional: \{\} <br /> |
 | `securityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | The security context for this container. See<br />https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#securitycontext-v1-core<br />for details. |  | Optional: \{\} <br /> |
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional: \{\} <br /> |
+
+
+
+
+#### GatewayParameters
+
+
+
+A GatewayParameters contains configuration that is used to dynamically
+provision kgateway's data plane (Envoy proxy instance), based on a
+Kubernetes Gateway.
+
+
+
+_Appears in:_
+- [GatewayParametersList](#gatewayparameterslist)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
+| `kind` _string_ | `GatewayParameters` | | |
+| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
+| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `spec` _[GatewayParametersSpec](#gatewayparametersspec)_ |  |  |  |
+| `status` _[GatewayParametersStatus](#gatewayparametersstatus)_ |  |  |  |
 
 
 
