@@ -57,21 +57,21 @@ and appends `Describe the painting as if you were a famous art critic from the 1
 to each request that is sent to the `openai` HTTPRoute.
 ```yaml
 metadata:
-	name: openai-opt
-	namespace: kgateway-system
+  name: openai-opt
+  namespace: kgateway-system
 spec:
-	targetRefs:
-	- group: gateway.networking.k8s.io
-	  kind: HTTPRoute
-	  name: openai
-	aiRoutePolicy:
-	    promptEnrichment:
-	      prepend:
-	      - role: SYSTEM
-	        content: "Answer all questions in French."
-	      append:
-	      - role: USER
-	        content: "Describe the painting as if you were a famous art critic from the 17th century."
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: openai
+  aiRoutePolicy:
+      promptEnrichment:
+        prepend:
+        - role: SYSTEM
+          content: "Answer all questions in French."
+        append:
+        - role: USER
+          content: "Describe the painting as if you were a famous art critic from the 17th century."
 ```
 
 
@@ -98,19 +98,19 @@ This example rejects any request prompts that contain
 the string "credit card", and masks any credit card numbers in the response.
 ```yaml
 promptGuard:
-	request:
-	  customResponse:
-	    message: "Rejected due to inappropriate content"
-	  regex:
-	    action: REJECT
-	    matches:
-	    - pattern: "credit card"
-	      name: "CC"
-	response:
-	  regex:
-	    builtins:
-	    - CREDIT_CARD
-	    action: MASK
+  request:
+    customResponse:
+      message: "Rejected due to inappropriate content"
+    regex:
+      action: REJECT
+      matches:
+      - pattern: "credit card"
+        name: "CC"
+  response:
+    regex:
+      builtins:
+      - CREDIT_CARD
+      action: MASK
 ```
 
 
@@ -625,7 +625,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",<br />"critical" and "off". Defaults to "info". See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information. |  | Optional <br /> |
-| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and<br />the values are one of "trace", "debug", "info", "warn", "error",<br />"critical", or "off", e.g.<br /><br />	``yaml<br />	componentLogLevels:<br />	  upstream: debug<br />	  connection: trace<br />	```<br /><br />These will be converted to the `--component-log-level` Envoy argument<br />value. See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information.<br /><br />Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional <br /> |
+| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and<br />the values are one of "trace", "debug", "info", "warn", "error",<br />"critical", or "off", e.g.<br /><br />  ``yaml<br />  componentLogLevels:<br />    upstream: debug<br />    connection: trace<br />  ```<br /><br />These will be converted to the `--component-log-level` Envoy argument<br />value. See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information.<br /><br />Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional <br /> |
 
 
 #### EnvoyContainer
@@ -1204,25 +1204,25 @@ Note: Only two levels of nesting are permitted. Any nested entries after the sec
 
 ```yaml
 multi:
-	priorities:
-	- pool:
-	  - azureOpenai:
-	      deploymentName: gpt-4o-mini
-	      apiVersion: 2024-02-15-preview
-	      endpoint: ai-gateway.openai.azure.com
-	      authToken:
-	        secretRef:
-	          name: azure-secret
-	          namespace: kgateway-system
-	- pool:
-	  - azureOpenai:
-	      deploymentName: gpt-4o-mini-2
-	      apiVersion: 2024-02-15-preview
-	      endpoint: ai-gateway-2.openai.azure.com
-	      authToken:
-	        secretRef:
-	          name: azure-secret-2
-	          namespace: kgateway-system
+  priorities:
+  - pool:
+    - azureOpenai:
+        deploymentName: gpt-4o-mini
+        apiVersion: 2024-02-15-preview
+        endpoint: ai-gateway.openai.azure.com
+        authToken:
+          secretRef:
+            name: azure-secret
+            namespace: kgateway-system
+  - pool:
+    - azureOpenai:
+        deploymentName: gpt-4o-mini-2
+        apiVersion: 2024-02-15-preview
+        endpoint: ai-gateway-2.openai.azure.com
+        authToken:
+          secretRef:
+            name: azure-secret-2
+            namespace: kgateway-system
 
 
 ```
