@@ -62,9 +62,15 @@ The following example prepends a system prompt of `Answer all questions in Frenc
 and appends `Describe the painting as if you were a famous art critic from the 17th century.`
 to each request that is sent to the `openai` HTTPRoute.
 ```yaml
+
+
   name: openai-opt
   namespace: kgateway-system
+
+
 spec:
+
+
   targetRefs:
   - group: gateway.networking.k8s.io
     kind: HTTPRoute
@@ -77,6 +83,8 @@ spec:
         append:
         - role: USER
           content: "Describe the painting as if you were a famous art critic from the 17th century."
+
+
 ```
 
 
@@ -103,6 +111,8 @@ This example rejects any request prompts that contain
 the string "credit card", and masks any credit card numbers in the response.
 ```yaml
 promptGuard:
+
+
   request:
     customResponse:
       message: "Rejected due to inappropriate content"
@@ -116,6 +126,8 @@ promptGuard:
       builtins:
       - CREDIT_CARD
       action: MASK
+
+
 ```
 
 
@@ -227,68 +239,142 @@ _Appears in:_
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional <br /> |
 | `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#containerport-v1-core) array_ | The extension's container ports. |  | Optional <br /> |
 | `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br />```yaml<br />stats:<br />  customLabels:<br />    - name: "subject"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:sub"<br />    - name: "issuer"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:iss"<br />``` |  |  |
+
+
 #### AiExtensionStats
+
+
+
+
+
+
+
 _Appears in:_
 - [AiExtension](#aiextension)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `customLabels` _[CustomLabel](#customlabel) array_ | Set of custom labels to be added to the request metrics.<br />These will be added on each request which goes through the AI Extension. |  |  |
+
+
 #### AnthropicConfig
+
+
+
 AnthropicConfig settings for the [Anthropic](https://docs.anthropic.com/en/release-notes/api) LLM provider.
+
+
+
 _Appears in:_
 - [SupportedLLMProvider](#supportedllmprovider)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Anthropic API.<br />This token is automatically sent in the `x-api-key` header of the request. |  | Required <br /> |
 | `apiVersion` _string_ | Optional: A version header to pass to the Anthropic API.<br />For more information, see the [Anthropic API versioning docs](https://docs.anthropic.com/en/api/versioning). |  |  |
 | `model` _string_ | Optional: Override the model name.<br />If unset, the model name is taken from the request.<br />This setting can be useful when testing model failover scenarios. |  |  |
+
+
 #### AwsAuth
+
+
+
 AwsAuth specifies the authentication method to use for the backend.
+
+
+
 _Appears in:_
 - [AwsBackend](#awsbackend)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `type` _[AwsAuthType](#awsauthtype)_ | Type specifies the authentication method to use for the backend. |  | Enum: [Secret] <br />Required <br /> |
 | `secret` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#localobjectreference-v1-core)_ | Secret references a Kubernetes Secret containing the AWS credentials.<br />The Secret must have keys "accessKey", "secretKey", and optionally "sessionToken". |  | Optional <br /> |
+
+
 #### AwsAuthType
+
 _Underlying type:_ _string_
+
 AwsAuthType specifies the authentication method to use for the backend.
+
+
+
 _Appears in:_
 - [AwsAuth](#awsauth)
+
 | Field | Description |
 | --- | --- |
 | `Secret` | AwsAuthTypeSecret uses credentials stored in a Kubernetes Secret.<br /> |
+
+
 #### AwsBackend
+
+
+
 AwsBackend is the AWS backend configuration.
+
+
+
 _Appears in:_
 - [BackendSpec](#backendspec)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `accountId` _string_ | AccountId is the AWS account ID to use for the backend. |  | MaxLength: 12 <br />MinLength: 1 <br />Pattern: `^[0-9]\{12\}$` <br />Required <br /> |
 | `auth` _[AwsAuth](#awsauth)_ | Auth specifies an explicit AWS authentication method for the backend.<br />When omitted, the authentication method will be inferred from the<br />environment (e.g. instance metadata, EKS Pod Identity, environment variables, etc.)<br />This may not work in all environments, so it is recommended to specify an authentication method.<br /><br />See the Envoy docs for more info:<br />https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/aws_request_signing_filter#credentials |  | Optional <br /> |
 | `lambda` _[AwsLambda](#awslambda)_ | Lambda configures the AWS lambda service. |  | Optional <br /> |
 | `region` _string_ | Region is the AWS region to use for the backend.<br />Defaults to us-east-1 if not specified. | us-east-1 | MaxLength: 63 <br />MinLength: 1 <br />Optional <br />Pattern: `^[a-z0-9-]+$` <br /> |
+
+
 #### AwsLambda
+
+
+
 AwsLambda configures the AWS lambda service.
+
+
+
 _Appears in:_
 - [AwsBackend](#awsbackend)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `endpointURL` _string_ | EndpointURL is the URL or domain for the Lambda service. This is primarily<br />useful for testing and development purposes. When omitted, the default<br />lambda hostname will be used. |  | MaxLength: 2048 <br />Optional <br />Pattern: `^https?://[-a-zA-Z0-9@:%.+~#?&/=]+$` <br /> |
 | `functionName` _string_ | FunctionName is the name of the Lambda function to invoke. |  | Pattern: `^[A-Za-z0-9-_]\{1,140\}$` <br />Required <br /> |
 | `invocationMode` _string_ | InvocationMode defines how to invoke the Lambda function.<br />Defaults to Sync. | Sync | Enum: [Sync Async] <br />Optional <br /> |
 | `qualifier` _string_ | Qualifier is the alias or version for the Lambda function.<br />Valid values include a numeric version (e.g. "1"), an alias name<br />(alphanumeric plus "-" or "_"), or the special literal "$LATEST". |  | Optional <br />Pattern: `^(\$LATEST\|[0-9]+\|[A-Za-z0-9-_]\{1,128\})$` <br /> |
+
+
 #### AzureOpenAIConfig
+
+
+
 AzureOpenAIConfig settings for the [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/) LLM provider.
+
+
+
 _Appears in:_
 - [SupportedLLMProvider](#supportedllmprovider)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Azure OpenAI API.<br />This token is automatically sent in the `api-key` header of the request. |  | Required <br /> |
 | `endpoint` _string_ | The endpoint for the Azure OpenAI API to use, such as `my-endpoint.openai.azure.com`.<br />If the scheme is included, it is stripped. |  | MinLength: 1 <br />Required <br /> |
 | `deploymentName` _string_ | The name of the Azure OpenAI model deployment to use.<br />For more information, see the [Azure OpenAI model docs](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models). |  | MinLength: 1 <br />Required <br /> |
 | `apiVersion` _string_ | The version of the Azure OpenAI API to use.<br />For more information, see the [Azure OpenAI API version reference](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#api-specs). |  | MinLength: 1 <br />Required <br /> |
+
+
 #### Backend
+
+
+
+
+
+
+
+
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
@@ -298,97 +384,193 @@ _Appears in:_
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[BackendSpec](#backendspec)_ |  |  |  |
 | `status` _[BackendStatus](#backendstatus)_ |  |  |  |
+
+
 #### BackendSpec
+
+
+
 BackendSpec defines the desired state of Backend.
+
+
+
 _Appears in:_
 - [Backend](#backend)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `type` _[BackendType](#backendtype)_ | Type indicates the type of the backend to be used. |  | Enum: [AI AWS Static] <br />Required <br /> |
 | `ai` _[AIBackend](#aibackend)_ | AI is the AI backend configuration. |  | MaxProperties: 1 <br />MinProperties: 1 <br /> |
 | `aws` _[AwsBackend](#awsbackend)_ | Aws is the AWS backend configuration. |  |  |
 | `static` _[StaticBackend](#staticbackend)_ | Static is the static backend configuration. |  |  |
+
+
 #### BackendStatus
+
+
+
 BackendStatus defines the observed state of Backend.
+
+
+
 _Appears in:_
 - [Backend](#backend)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#condition-v1-meta) array_ | Conditions is the list of conditions for the backend. |  | MaxItems: 8 <br /> |
+
+
 #### BackendType
+
 _Underlying type:_ _string_
+
 BackendType indicates the type of the backend.
+
+
+
 _Appears in:_
 - [BackendSpec](#backendspec)
+
 | Field | Description |
 | --- | --- |
 | `AI` | BackendTypeAI is the type for AI backends.<br /> |
 | `AWS` | BackendTypeAWS is the type for AWS backends.<br /> |
 | `Static` | BackendTypeStatic is the type for static backends.<br /> |
+
+
 #### BodyParseBehavior
+
 _Underlying type:_ _string_
+
 BodyparseBehavior defines how the body should be parsed
 If set to json and the body is not json then the filter will not perform the transformation.
+
 _Validation:_
 - Enum: [AsString AsJson]
+
 _Appears in:_
 - [BodyTransformation](#bodytransformation)
+
 | Field | Description |
 | --- | --- |
 | `AsString` |  |
 | `AsJson` |  |
+
+
 #### BodyTransformation
+
+
+
 BodyTransformation controls how the body should be parsed and transformed.
+
+
+
 _Appears in:_
 - [Transform](#transform)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `parseAs` _[BodyParseBehavior](#bodyparsebehavior)_ | ParseAs defines what auto formatting should be applied to the body.<br />This can make interacting with keys within a json body much easier if AsJson is selected. | AsString | Enum: [AsString AsJson] <br /> |
 | `value` _[InjaTemplate](#injatemplate)_ | Value is the template to apply to generate the output value for the body. |  |  |
+
+
 #### BuiltIn
+
 _Underlying type:_ _string_
+
 BuiltIn regex patterns for specific types of strings in prompts.
 For example, if you specify `CREDIT_CARD`, any credit card numbers
 in the request or response are matched.
+
 _Validation:_
 - Enum: [SSN CREDIT_CARD PHONE_NUMBER EMAIL]
+
 _Appears in:_
 - [Regex](#regex)
+
 | Field | Description |
 | --- | --- |
 | `SSN` | Default regex matching for Social Security numbers.<br /> |
 | `CREDIT_CARD` | Default regex matching for credit card numbers.<br /> |
 | `PHONE_NUMBER` | Default regex matching for phone numbers.<br /> |
 | `EMAIL` | Default regex matching for email addresses.<br /> |
+
+
 #### CELFilter
+
+
+
 CELFilter filters requests based on Common Expression Language (CEL).
+
+
+
 _Appears in:_
 - [FilterType](#filtertype)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `match` _string_ | The CEL expressions to evaluate. AccessLogs are only emitted when the CEL expressions evaluates to true.<br />see: https://www.envoyproxy.io/docs/envoy/v1.33.0/xds/type/v3/cel.proto.html#common-expression-language-cel-proto |  |  |
+
+
 #### ComparisonFilter
+
 _Underlying type:_ _[struct{Op Op "json:\"op,omitempty\""; Value uint32 "json:\"value,omitempty\""}](#struct{op-op-"json:\"op,omitempty\"";-value-uint32-"json:\"value,omitempty\""})_
+
 ComparisonFilter represents a filter based on a comparison.
 Based on: https://www.envoyproxy.io/docs/envoy/v1.33.0/api-v3/config/accesslog/v3/accesslog.proto#config-accesslog-v3-comparisonfilter
+
+
+
 _Appears in:_
 - [DurationFilter](#durationfilter)
 - [StatusCodeFilter](#statuscodefilter)
+
+
+
 #### CustomLabel
+
 _Underlying type:_ _[struct{Name string "json:\"name\""; MetadataNamespace *string "json:\"metadataNamespace,omitempty\""; MetdataKey string "json:\"metadataKey\""; KeyDelimiter *string "json:\"keyDelimiter,omitempty\""}](#struct{name-string-"json:\"name\"";-metadatanamespace-*string-"json:\"metadatanamespace,omitempty\"";-metdatakey-string-"json:\"metadatakey\"";-keydelimiter-*string-"json:\"keydelimiter,omitempty\""})_
+
+
+
+
+
 _Appears in:_
 - [AiExtensionStats](#aiextensionstats)
+
+
+
 #### CustomResponse
+
+
+
 CustomResponse configures a response to return to the client if request content
 is matched against a regex pattern and the action is `REJECT`.
+
+
+
 _Appears in:_
 - [PromptguardRequest](#promptguardrequest)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `message` _string_ | A custom response message to return to the client. If not specified, defaults to<br />"The request was rejected due to inappropriate content". | The request was rejected due to inappropriate content |  |
 | `statusCode` _integer_ | The status code to return to the client. Defaults to 403. | 403 | Maximum: 599 <br />Minimum: 200 <br /> |
+
+
+
+
 #### DirectResponse
+
+
+
 DirectResponse contains configuration for defining direct response routes.
+
+
+
+
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
@@ -398,29 +580,64 @@ DirectResponse contains configuration for defining direct response routes.
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[DirectResponseSpec](#directresponsespec)_ |  |  |  |
 | `status` _[DirectResponseStatus](#directresponsestatus)_ |  |  |  |
+
+
 #### DirectResponseSpec
+
+
+
 DirectResponseSpec describes the desired state of a DirectResponse.
+
+
+
 _Appears in:_
 - [DirectResponse](#directresponse)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `status` _integer_ | StatusCode defines the HTTP status code to return for this route. |  | Maximum: 599 <br />Minimum: 200 <br />Required <br /> |
 | `body` _string_ | Body defines the content to be returned in the HTTP response body.<br />The maximum length of the body is restricted to prevent excessively large responses. |  | MaxLength: 4096 <br />Optional <br /> |
+
+
 #### DirectResponseStatus
+
+
+
 DirectResponseStatus defines the observed state of a DirectResponse.
+
+
+
 _Appears in:_
 - [DirectResponse](#directresponse)
+
+
+
 #### DurationFilter
+
 _Underlying type:_ _[ComparisonFilter](#comparisonfilter)_
+
 DurationFilter filters based on request duration.
 Based on: https://www.envoyproxy.io/docs/envoy/v1.33.0/api-v3/config/accesslog/v3/accesslog.proto#config-accesslog-v3-durationfilter
+
+
+
 _Appears in:_
 - [FilterType](#filtertype)
+
+
+
 #### EnvoyBootstrap
+
+
+
 Configuration for the Envoy proxy instance that is provisioned from a
 Kubernetes Gateway.
+
+
+
 _Appears in:_
 - [EnvoyContainer](#envoycontainer)
+
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",<br />"critical" and "off". Defaults to "info". See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information. |  | Optional <br /> |
@@ -463,6 +680,8 @@ Example: Setting a default system field for Anthropic, which does not support sy
 defaults:
   - field: "system"
     value: "answer all questions in French"
+
+
 ```
 
 
@@ -474,6 +693,8 @@ defaults:
   - field: "max_tokens"
     value: "100"
     override: true
+
+
 ```
 
 
@@ -482,6 +703,8 @@ Example: Overriding a custom list field:
 defaults:
   - field: "custom_list"
     value: "[a,b,c]"
+
+
 ```
 
 
@@ -1003,6 +1226,8 @@ Note: Only two levels of nesting are permitted. Any nested entries after the sec
 
 ```yaml
 multi:
+
+
   priorities:
   - pool:
     - azureOpenai:
@@ -1022,6 +1247,8 @@ multi:
           secretRef:
             name: azure-secret-2
             namespace: kgateway-system
+
+
 ```
 
 
