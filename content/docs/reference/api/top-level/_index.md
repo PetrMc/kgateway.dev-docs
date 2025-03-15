@@ -227,15 +227,7 @@ _Appears in:_
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional <br /> |
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional <br /> |
 | `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#containerport-v1-core) array_ | The extension's container ports. |  | Optional <br /> |
-| `stats` _[AiExtensionStats](#aiextensionstats)_ | `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br /><pre><code class="language-yaml">stats:
-  customLabels:
-    - name: "subject"
-      metadataNamespace: "envoy.filters.http.jwt_authn"
-      metadataKey: "principal:sub"
-    - name: "issuer"
-      metadataNamespace: "envoy.filters.http.jwt_authn"
-      metadataKey: "principal:iss"
-</code></pre> |  |  |
+| `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br />`stats:<br>  customLabels:<br>    - name: "subject"<br>      metadataNamespace: "envoy.filters.http.jwt_authn"<br>      metadataKey: "principal:sub"<br>    - name: "issuer"<br>      metadataNamespace: "envoy.filters.http.jwt_authn"<br>      metadataKey: "principal:iss"` |  |  |
 
 
 #### AiExtensionStats
