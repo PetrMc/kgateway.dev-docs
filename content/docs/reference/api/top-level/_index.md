@@ -81,6 +81,7 @@ spec:
 
 
 
+
 _Appears in:_
 - [AIRoutePolicy](#airoutepolicy)
 
@@ -117,6 +118,7 @@ promptGuard:
       - CREDIT_CARD
       action: MASK
 ```
+
 
 
 
@@ -590,6 +592,7 @@ defaults:
 ```
 
 
+
 Example: Setting a default temperature and overriding `max_tokens`:
 ```yaml
 defaults:
@@ -601,12 +604,14 @@ defaults:
 ```
 
 
+
 Example: Overriding a custom list field:
 ```yaml
 defaults:
   - field: "custom_list"
     value: "[a,b,c]"
 ```
+
 
 
 Note: The `field` values correspond to keys in the JSON request body, not fields in this CRD.
@@ -1147,6 +1152,7 @@ multi:
             name: azure-secret-2
             namespace: kgateway-system
 ```
+
 
 
 
