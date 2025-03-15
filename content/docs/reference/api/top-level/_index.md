@@ -239,7 +239,8 @@ stats:
     - name: "issuer"
       metadataNamespace: "envoy.filters.http.jwt_authn"
       metadataKey: "principal:iss"
-``` |  |  |
+``` |
+|  |  |
 #### AiExtensionStats
 _Appears in:_
 - [AiExtension](#aiextension)
