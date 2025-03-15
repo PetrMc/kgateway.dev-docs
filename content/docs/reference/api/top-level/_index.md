@@ -56,29 +56,21 @@ The following example prepends a system prompt of `Answer all questions in Frenc
 and appends `Describe the painting as if you were a famous art critic from the 17th century.`
 to each request that is sent to the `openai` HTTPRoute.
 ```yaml
-
-
-	name: openai-opt
-	namespace: kgateway-system
-
-
+  name: openai-opt
+  namespace: kgateway-system
 spec:
-
-
-	targetRefs:
-	- group: gateway.networking.k8s.io
-	  kind: HTTPRoute
-	  name: openai
-	aiRoutePolicy:
-	    promptEnrichment:
-	      prepend:
-	      - role: SYSTEM
-	        content: "Answer all questions in French."
-	      append:
-	      - role: USER
-	        content: "Describe the painting as if you were a famous art critic from the 17th century."
-
-
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: openai
+  aiRoutePolicy:
+      promptEnrichment:
+        prepend:
+        - role: SYSTEM
+          content: "Answer all questions in French."
+        append:
+        - role: USER
+          content: "Describe the painting as if you were a famous art critic from the 17th century."
 ```
 
 
@@ -105,23 +97,19 @@ This example rejects any request prompts that contain
 the string "credit card", and masks any credit card numbers in the response.
 ```yaml
 promptGuard:
-
-
-	request:
-	  customResponse:
-	    message: "Rejected due to inappropriate content"
-	  regex:
-	    action: REJECT
-	    matches:
-	    - pattern: "credit card"
-	      name: "CC"
-	response:
-	  regex:
-	    builtins:
-	    - CREDIT_CARD
-	    action: MASK
-
-
+  request:
+    customResponse:
+      message: "Rejected due to inappropriate content"
+    regex:
+      action: REJECT
+      matches:
+      - pattern: "credit card"
+        name: "CC"
+  response:
+    regex:
+      builtins:
+      - CREDIT_CARD
+      action: MASK
 ```
 
 
@@ -674,8 +662,6 @@ Example: Setting a default system field for Anthropic, which does not support sy
 defaults:
   - field: "system"
     value: "answer all questions in French"
-
-
 ```
 
 
@@ -687,8 +673,6 @@ defaults:
   - field: "max_tokens"
     value: "100"
     override: true
-
-
 ```
 
 
@@ -697,8 +681,6 @@ Example: Overriding a custom list field:
 defaults:
   - field: "custom_list"
     value: "[a,b,c]"
-
-
 ```
 
 
@@ -1220,29 +1202,25 @@ Note: Only two levels of nesting are permitted. Any nested entries after the sec
 
 ```yaml
 multi:
-
-
-	priorities:
-	- pool:
-	  - azureOpenai:
-	      deploymentName: gpt-4o-mini
-	      apiVersion: 2024-02-15-preview
-	      endpoint: ai-gateway.openai.azure.com
-	      authToken:
-	        secretRef:
-	          name: azure-secret
-	          namespace: kgateway-system
-	- pool:
-	  - azureOpenai:
-	      deploymentName: gpt-4o-mini-2
-	      apiVersion: 2024-02-15-preview
-	      endpoint: ai-gateway-2.openai.azure.com
-	      authToken:
-	        secretRef:
-	          name: azure-secret-2
-	          namespace: kgateway-system
-
-
+  priorities:
+  - pool:
+    - azureOpenai:
+        deploymentName: gpt-4o-mini
+        apiVersion: 2024-02-15-preview
+        endpoint: ai-gateway.openai.azure.com
+        authToken:
+          secretRef:
+            name: azure-secret
+            namespace: kgateway-system
+  - pool:
+    - azureOpenai:
+        deploymentName: gpt-4o-mini-2
+        apiVersion: 2024-02-15-preview
+        endpoint: ai-gateway-2.openai.azure.com
+        authToken:
+          secretRef:
+            name: azure-secret-2
+            namespace: kgateway-system
 ```
 
 
