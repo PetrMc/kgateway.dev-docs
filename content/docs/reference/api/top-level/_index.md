@@ -227,9 +227,9 @@ _Appears in:_
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional <br /> |
 | `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#containerport-v1-core) array_ | The extension's container ports. |  | Optional <br /> |
 | `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.
-This config can be useful for adding custom labels to the request metrics.
+This config can be useful for adding custom labels to the request metrics.  
 
-Example:
+Example:  
 ```yaml
 stats:
   customLabels:
