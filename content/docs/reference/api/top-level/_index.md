@@ -226,30 +226,53 @@ _Appears in:_
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#resourcerequirements-v1-core)_ | The compute resources required by this container. See<br />https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/<br />for details. |  | Optional <br /> |
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#envvar-v1-core) array_ | The extension's container environment variables. |  | Optional <br /> |
 | `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#containerport-v1-core) array_ | The extension's container ports. |  | Optional <br /> |
-| `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.<br />This config can be useful for adding custom labels to the request metrics.<br /><br />Example:<br />```yaml<br />stats:<br />  customLabels:<br />    - name: "subject"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:sub"<br />    - name: "issuer"<br />      metadataNamespace: "envoy.filters.http.jwt_authn"<br />      metadataKey: "principal:iss"<br />``` |  |  |
+| `stats` _[AiExtensionStats](#aiextensionstats)_ | Additional stats config for AI Extension.
+This config can be useful for adding custom labels to the request metrics.
+
+Example:
+```yaml
+stats:
+  customLabels:
+    - name: "subject"
+      metadataNamespace: "envoy.filters.http.jwt_authn"
+      metadataKey: "principal:sub"
+    - name: "issuer"
+      metadataNamespace: "envoy.filters.http.jwt_authn"
+      metadataKey: "principal:iss"
+``` |  |  |
 #### AiExtensionStats
 _Appears in:_
 - [AiExtension](#aiextension)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `customLabels` _[CustomLabel](#customlabel) array_ | Set of custom labels to be added to the request metrics.<br />These will be added on each request which goes through the AI Extension. |  |  |
+| `customLabels` _[CustomLabel](#customlabel) array_ | Set of custom labels to be added to the request metrics.
+These will be added on each request which goes through the AI Extension. |  |  |
 #### AnthropicConfig
 AnthropicConfig settings for the [Anthropic](https://docs.anthropic.com/en/release-notes/api) LLM provider.
 _Appears in:_
 - [SupportedLLMProvider](#supportedllmprovider)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Anthropic API.<br />This token is automatically sent in the `x-api-key` header of the request. |  | Required <br /> |
-| `apiVersion` _string_ | Optional: A version header to pass to the Anthropic API.<br />For more information, see the [Anthropic API versioning docs](https://docs.anthropic.com/en/api/versioning). |  |  |
-| `model` _string_ | Optional: Override the model name.<br />If unset, the model name is taken from the request.<br />This setting can be useful when testing model failover scenarios. |  |  |
+| `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Anthropic API.
+This token is automatically sent in the `x-api-key` header of the request. |  | Required 
+ |
+| `apiVersion` _string_ | Optional: A version header to pass to the Anthropic API.
+For more information, see the [Anthropic API versioning docs](https://docs.anthropic.com/en/api/versioning). |  |  |
+| `model` _string_ | Optional: Override the model name.
+If unset, the model name is taken from the request.
+This setting can be useful when testing model failover scenarios. |  |  |
 #### AwsAuth
 AwsAuth specifies the authentication method to use for the backend.
 _Appears in:_
 - [AwsBackend](#awsbackend)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `type` _[AwsAuthType](#awsauthtype)_ | Type specifies the authentication method to use for the backend. |  | Enum: [Secret] <br />Required <br /> |
-| `secret` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#localobjectreference-v1-core)_ | Secret references a Kubernetes Secret containing the AWS credentials.<br />The Secret must have keys "accessKey", "secretKey", and optionally "sessionToken". |  | Optional <br /> |
+| `type` _[AwsAuthType](#awsauthtype)_ | Type specifies the authentication method to use for the backend. |  | Enum: [Secret] 
+Required 
+ |
+| `secret` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#localobjectreference-v1-core)_ | Secret references a Kubernetes Secret containing the AWS credentials.
+The Secret must have keys "accessKey", "secretKey", and optionally "sessionToken". |  | Optional 
+ |
 #### AwsAuthType
 _Underlying type:_ _string_
 AwsAuthType specifies the authentication method to use for the backend.
@@ -257,44 +280,94 @@ _Appears in:_
 - [AwsAuth](#awsauth)
 | Field | Description |
 | --- | --- |
-| `Secret` | AwsAuthTypeSecret uses credentials stored in a Kubernetes Secret.<br /> |
+| `Secret` | AwsAuthTypeSecret uses credentials stored in a Kubernetes Secret.
+ |
 #### AwsBackend
 AwsBackend is the AWS backend configuration.
 _Appears in:_
 - [BackendSpec](#backendspec)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `accountId` _string_ | AccountId is the AWS account ID to use for the backend. |  | MaxLength: 12 <br />MinLength: 1 <br />Pattern: `^[0-9]\{12\}$` <br />Required <br /> |
-| `auth` _[AwsAuth](#awsauth)_ | Auth specifies an explicit AWS authentication method for the backend.<br />When omitted, the authentication method will be inferred from the<br />environment (e.g. instance metadata, EKS Pod Identity, environment variables, etc.)<br />This may not work in all environments, so it is recommended to specify an authentication method.<br /><br />See the Envoy docs for more info:<br />https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/aws_request_signing_filter#credentials |  | Optional <br /> |
-| `lambda` _[AwsLambda](#awslambda)_ | Lambda configures the AWS lambda service. |  | Optional <br /> |
-| `region` _string_ | Region is the AWS region to use for the backend.<br />Defaults to us-east-1 if not specified. | us-east-1 | MaxLength: 63 <br />MinLength: 1 <br />Optional <br />Pattern: `^[a-z0-9-]+$` <br /> |
+| `accountId` _string_ | AccountId is the AWS account ID to use for the backend. |  | MaxLength: 12 
+MinLength: 1 
+Pattern: `^[0-9]\{12\}$` 
+Required 
+ |
+| `auth` _[AwsAuth](#awsauth)_ | Auth specifies an explicit AWS authentication method for the backend.
+When omitted, the authentication method will be inferred from the
+environment (e.g. instance metadata, EKS Pod Identity, environment variables, etc.)
+This may not work in all environments, so it is recommended to specify an authentication method.
+
+See the Envoy docs for more info:
+https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/aws_request_signing_filter#credentials |  | Optional 
+ |
+| `lambda` _[AwsLambda](#awslambda)_ | Lambda configures the AWS lambda service. |  | Optional 
+ |
+| `region` _string_ | Region is the AWS region to use for the backend.
+Defaults to us-east-1 if not specified. | us-east-1 | MaxLength: 63 
+MinLength: 1 
+Optional 
+Pattern: `^[a-z0-9-]+$` 
+ |
 #### AwsLambda
 AwsLambda configures the AWS lambda service.
 _Appears in:_
 - [AwsBackend](#awsbackend)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `endpointURL` _string_ | EndpointURL is the URL or domain for the Lambda service. This is primarily<br />useful for testing and development purposes. When omitted, the default<br />lambda hostname will be used. |  | MaxLength: 2048 <br />Optional <br />Pattern: `^https?://[-a-zA-Z0-9@:%.+~#?&/=]+$` <br /> |
-| `functionName` _string_ | FunctionName is the name of the Lambda function to invoke. |  | Pattern: `^[A-Za-z0-9-_]\{1,140\}$` <br />Required <br /> |
-| `invocationMode` _string_ | InvocationMode defines how to invoke the Lambda function.<br />Defaults to Sync. | Sync | Enum: [Sync Async] <br />Optional <br /> |
-| `qualifier` _string_ | Qualifier is the alias or version for the Lambda function.<br />Valid values include a numeric version (e.g. "1"), an alias name<br />(alphanumeric plus "-" or "_"), or the special literal "$LATEST". |  | Optional <br />Pattern: `^(\$LATEST\|[0-9]+\|[A-Za-z0-9-_]\{1,128\})$` <br /> |
+| `endpointURL` _string_ | EndpointURL is the URL or domain for the Lambda service. This is primarily
+useful for testing and development purposes. When omitted, the default
+lambda hostname will be used. |  | MaxLength: 2048 
+Optional 
+Pattern: `^https?://[-a-zA-Z0-9@:%.+~#?&/=]+$` 
+ |
+| `functionName` _string_ | FunctionName is the name of the Lambda function to invoke. |  | Pattern: `^[A-Za-z0-9-_]\{1,140\}$` 
+Required 
+ |
+| `invocationMode` _string_ | InvocationMode defines how to invoke the Lambda function.
+Defaults to Sync. | Sync | Enum: [Sync Async] 
+Optional 
+ |
+| `qualifier` _string_ | Qualifier is the alias or version for the Lambda function.
+Valid values include a numeric version (e.g. "1"), an alias name
+(alphanumeric plus "-" or "_"), or the special literal "$LATEST". |  | Optional 
+Pattern: `^(\$LATEST\|[0-9]+\|[A-Za-z0-9-_]\{1,128\})$` 
+ |
 #### AzureOpenAIConfig
 AzureOpenAIConfig settings for the [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/) LLM provider.
 _Appears in:_
 - [SupportedLLMProvider](#supportedllmprovider)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Azure OpenAI API.<br />This token is automatically sent in the `api-key` header of the request. |  | Required <br /> |
-| `endpoint` _string_ | The endpoint for the Azure OpenAI API to use, such as `my-endpoint.openai.azure.com`.<br />If the scheme is included, it is stripped. |  | MinLength: 1 <br />Required <br /> |
-| `deploymentName` _string_ | The name of the Azure OpenAI model deployment to use.<br />For more information, see the [Azure OpenAI model docs](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models). |  | MinLength: 1 <br />Required <br /> |
-| `apiVersion` _string_ | The version of the Azure OpenAI API to use.<br />For more information, see the [Azure OpenAI API version reference](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#api-specs). |  | MinLength: 1 <br />Required <br /> |
+| `authToken` _[SingleAuthToken](#singleauthtoken)_ | The authorization token that the AI gateway uses to access the Azure OpenAI API.
+This token is automatically sent in the `api-key` header of the request. |  | Required 
+ |
+| `endpoint` _string_ | The endpoint for the Azure OpenAI API to use, such as `my-endpoint.openai.azure.com`.
+If the scheme is included, it is stripped. |  | MinLength: 1 
+Required 
+ |
+| `deploymentName` _string_ | The name of the Azure OpenAI model deployment to use.
+For more information, see the [Azure OpenAI model docs](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models). |  | MinLength: 1 
+Required 
+ |
+| `apiVersion` _string_ | The version of the Azure OpenAI API to use.
+For more information, see the [Azure OpenAI API version reference](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#api-specs). |  | MinLength: 1 
+Required 
+ |
 #### Backend
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
 | `kind` _string_ | `Backend` | | |
-| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
-| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
+| `kind` _string_ | Kind is a string value representing the REST resource this object represents.
+Servers may infer this from the endpoint the client submits requests to.
+Cannot be updated.
+In CamelCase.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
+| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.
+Servers should convert recognized schemas to the latest internal value, and
+may reject unrecognized values.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[BackendSpec](#backendspec)_ |  |  |  |
 | `status` _[BackendStatus](#backendstatus)_ |  |  |  |
@@ -304,8 +377,12 @@ _Appears in:_
 - [Backend](#backend)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `type` _[BackendType](#backendtype)_ | Type indicates the type of the backend to be used. |  | Enum: [AI AWS Static] <br />Required <br /> |
-| `ai` _[AIBackend](#aibackend)_ | AI is the AI backend configuration. |  | MaxProperties: 1 <br />MinProperties: 1 <br /> |
+| `type` _[BackendType](#backendtype)_ | Type indicates the type of the backend to be used. |  | Enum: [AI AWS Static] 
+Required 
+ |
+| `ai` _[AIBackend](#aibackend)_ | AI is the AI backend configuration. |  | MaxProperties: 1 
+MinProperties: 1 
+ |
 | `aws` _[AwsBackend](#awsbackend)_ | Aws is the AWS backend configuration. |  |  |
 | `static` _[StaticBackend](#staticbackend)_ | Static is the static backend configuration. |  |  |
 #### BackendStatus
@@ -314,7 +391,8 @@ _Appears in:_
 - [Backend](#backend)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#condition-v1-meta) array_ | Conditions is the list of conditions for the backend. |  | MaxItems: 8 <br /> |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#condition-v1-meta) array_ | Conditions is the list of conditions for the backend. |  | MaxItems: 8 
+ |
 #### BackendType
 _Underlying type:_ _string_
 BackendType indicates the type of the backend.
@@ -322,9 +400,12 @@ _Appears in:_
 - [BackendSpec](#backendspec)
 | Field | Description |
 | --- | --- |
-| `AI` | BackendTypeAI is the type for AI backends.<br /> |
-| `AWS` | BackendTypeAWS is the type for AWS backends.<br /> |
-| `Static` | BackendTypeStatic is the type for static backends.<br /> |
+| `AI` | BackendTypeAI is the type for AI backends.
+ |
+| `AWS` | BackendTypeAWS is the type for AWS backends.
+ |
+| `Static` | BackendTypeStatic is the type for static backends.
+ |
 #### BodyParseBehavior
 _Underlying type:_ _string_
 BodyparseBehavior defines how the body should be parsed
@@ -343,7 +424,9 @@ _Appears in:_
 - [Transform](#transform)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `parseAs` _[BodyParseBehavior](#bodyparsebehavior)_ | ParseAs defines what auto formatting should be applied to the body.<br />This can make interacting with keys within a json body much easier if AsJson is selected. | AsString | Enum: [AsString AsJson] <br /> |
+| `parseAs` _[BodyParseBehavior](#bodyparsebehavior)_ | ParseAs defines what auto formatting should be applied to the body.
+This can make interacting with keys within a json body much easier if AsJson is selected. | AsString | Enum: [AsString AsJson] 
+ |
 | `value` _[InjaTemplate](#injatemplate)_ | Value is the template to apply to generate the output value for the body. |  |  |
 #### BuiltIn
 _Underlying type:_ _string_
@@ -356,17 +439,22 @@ _Appears in:_
 - [Regex](#regex)
 | Field | Description |
 | --- | --- |
-| `SSN` | Default regex matching for Social Security numbers.<br /> |
-| `CREDIT_CARD` | Default regex matching for credit card numbers.<br /> |
-| `PHONE_NUMBER` | Default regex matching for phone numbers.<br /> |
-| `EMAIL` | Default regex matching for email addresses.<br /> |
+| `SSN` | Default regex matching for Social Security numbers.
+ |
+| `CREDIT_CARD` | Default regex matching for credit card numbers.
+ |
+| `PHONE_NUMBER` | Default regex matching for phone numbers.
+ |
+| `EMAIL` | Default regex matching for email addresses.
+ |
 #### CELFilter
 CELFilter filters requests based on Common Expression Language (CEL).
 _Appears in:_
 - [FilterType](#filtertype)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `match` _string_ | The CEL expressions to evaluate. AccessLogs are only emitted when the CEL expressions evaluates to true.<br />see: https://www.envoyproxy.io/docs/envoy/v1.33.0/xds/type/v3/cel.proto.html#common-expression-language-cel-proto |  |  |
+| `match` _string_ | The CEL expressions to evaluate. AccessLogs are only emitted when the CEL expressions evaluates to true.
+see: https://www.envoyproxy.io/docs/envoy/v1.33.0/xds/type/v3/cel.proto.html#common-expression-language-cel-proto |  |  |
 #### ComparisonFilter
 _Underlying type:_ _[struct{Op Op "json:\"op,omitempty\""; Value uint32 "json:\"value,omitempty\""}](#struct{op-op-"json:\"op,omitempty\"";-value-uint32-"json:\"value,omitempty\""})_
 ComparisonFilter represents a filter based on a comparison.
@@ -385,16 +473,26 @@ _Appears in:_
 - [PromptguardRequest](#promptguardrequest)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `message` _string_ | A custom response message to return to the client. If not specified, defaults to<br />"The request was rejected due to inappropriate content". | The request was rejected due to inappropriate content |  |
-| `statusCode` _integer_ | The status code to return to the client. Defaults to 403. | 403 | Maximum: 599 <br />Minimum: 200 <br /> |
+| `message` _string_ | A custom response message to return to the client. If not specified, defaults to
+"The request was rejected due to inappropriate content". | The request was rejected due to inappropriate content |  |
+| `statusCode` _integer_ | The status code to return to the client. Defaults to 403. | 403 | Maximum: 599 
+Minimum: 200 
+ |
 #### DirectResponse
 DirectResponse contains configuration for defining direct response routes.
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `gateway.kgateway.dev/v1alpha1` | | |
 | `kind` _string_ | `DirectResponse` | | |
-| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
-| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
+| `kind` _string_ | Kind is a string value representing the REST resource this object represents.
+Servers may infer this from the endpoint the client submits requests to.
+Cannot be updated.
+In CamelCase.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
+| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.
+Servers should convert recognized schemas to the latest internal value, and
+may reject unrecognized values.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[DirectResponseSpec](#directresponsespec)_ |  |  |  |
 | `status` _[DirectResponseStatus](#directresponsestatus)_ |  |  |  |
@@ -404,8 +502,14 @@ _Appears in:_
 - [DirectResponse](#directresponse)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `status` _integer_ | StatusCode defines the HTTP status code to return for this route. |  | Maximum: 599 <br />Minimum: 200 <br />Required <br /> |
-| `body` _string_ | Body defines the content to be returned in the HTTP response body.<br />The maximum length of the body is restricted to prevent excessively large responses. |  | MaxLength: 4096 <br />Optional <br /> |
+| `status` _integer_ | StatusCode defines the HTTP status code to return for this route. |  | Maximum: 599 
+Minimum: 200 
+Required 
+ |
+| `body` _string_ | Body defines the content to be returned in the HTTP response body.
+The maximum length of the body is restricted to prevent excessively large responses. |  | MaxLength: 4096 
+Optional 
+ |
 #### DirectResponseStatus
 DirectResponseStatus defines the observed state of a DirectResponse.
 _Appears in:_
@@ -423,8 +527,28 @@ _Appears in:_
 - [EnvoyContainer](#envoycontainer)
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",<br />"critical" and "off". Defaults to "info". See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information. |  | Optional <br /> |
-| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and<br />the values are one of "trace", "debug", "info", "warn", "error",<br />"critical", or "off", e.g.<br /><br />  ```yaml<br />  componentLogLevels:<br />    upstream: debug<br />    connection: trace<br />  ```<br /><br />These will be converted to the `--component-log-level` Envoy argument<br />value. See<br />https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy<br />for more information.<br /><br />Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional <br /> |
+| `logLevel` _string_ | Envoy log level. Options include "trace", "debug", "info", "warn", "error",
+"critical" and "off". Defaults to "info". See
+https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy
+for more information. |  | Optional 
+ |
+| `componentLogLevels` _object (keys:string, values:string)_ | Envoy log levels for specific components. The keys are component names and
+the values are one of "trace", "debug", "info", "warn", "error",
+"critical", or "off", e.g.
+
+  ```yaml
+  componentLogLevels:
+    upstream: debug
+    connection: trace
+  ```
+
+These will be converted to the `--component-log-level` Envoy argument
+value. See
+https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy#debugging-envoy
+for more information.
+
+Note: the keys and values cannot be empty, but they are not otherwise validated. |  | Optional 
+ |
 
 
 #### EnvoyContainer
